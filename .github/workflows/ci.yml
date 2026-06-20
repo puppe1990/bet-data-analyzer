@@ -12,6 +12,8 @@ concurrency:
 jobs:
   quality:
     runs-on: ubuntu-latest
+    env:
+      MIX_ENV: test
 
     steps:
       - name: Checkout
@@ -20,7 +22,7 @@ jobs:
       - name: Setup Elixir
         uses: erlef/setup-beam@v1
         with:
-          elixir-version: "1.17"
+          elixir-version: "1.18"
           otp-version: "27"
 
       - name: Setup Node
