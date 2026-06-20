@@ -20,8 +20,8 @@ jobs:
       - name: Setup Elixir
         uses: erlef/setup-beam@v1
         with:
-          elixir-version: "1.15"
-          otp-version: "26"
+          elixir-version: "1.17"
+          otp-version: "27"
 
       - name: Setup Node
         uses: actions/setup-node@v4
