@@ -1,0 +1,87 @@
+<Layouts.app flash={@flash} current_scope={%{}}>
+  <div class="space-y-6">
+    <.link navigate={~p"/fixtures"} class="btn btn-ghost btn-sm">
+      <.icon name="hero-arrow-left" class="size-4" /> Voltar
+    </.link>
+
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+      <div>
+        <h1 class="text-2xl font-bold">{@fixture.name}</h1>
+        <p class="text-sm opacity-70">
+          {@fixture.league_name} · {format_kickoff(@fixture.starting_at)}
+        </p>
+      </div>
+
+      <button
+        phx-click="compile"
+        class="btn btn-primary"
+        disabled={@pack && @pack.status == "processing"}
+      >
+        <.icon name="hero-cpu-chip" class="size-4" />
+        Compilar dados
+      </button>
+    </div>
+
+    <%= if @pack do %>
+      <div class="card bg-base-200">
+        <div class="card-body py-4">
+          <div class="flex items-center justify-between">
+            <span class="font-medium">Status: {status_label(@pack.status)}</span>
+            <span class="text-sm">{@pack.progress || 0}%</span>
+          </div>
+          <progress
+            class="progress progress-primary w-full"
+            value={@pack.progress || 0}
+            max="100"
+          />
+          <%= if @pack.status == "failed" do %>
+            <p class="text-error text-sm mt-2">{@pack.error_message}</p>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <%= if @pack && @pack.status == "complete" && @pack.data do %>
+      <div class="flex flex-wrap gap-2">
+        <button phx-click="copy_json" class="btn btn-outline btn-sm">
+          <.icon name="hero-clipboard-document" class="size-4" /> Copiar JSON
+        </button>
+        <button phx-click="copy_prompt" class="btn btn-outline btn-sm">
+          <.icon name="hero-chat-bubble-left-right" class="size-4" /> Copiar prompt
+        </button>
+        <a
+          href={~p"/fixtures/#{@fixture.id}/export"}
+          class="btn btn-outline btn-sm"
+          download={"fixture-#{@fixture.sportmonks_id}.json"}
+        >
+          <.icon name="hero-arrow-down-tray" class="size-4" /> Download JSON
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <.stat_card title="API calls" value={@pack.api_calls} />
+        <.stat_card title="H2H" value={length(get_in(@pack.data, ["head_to_head"]) || [])} />
+        <.stat_card
+          title="Odds markets"
+          value={length(get_in(@pack.data, ["odds", "markets"]) || [])}
+        />
+      </div>
+
+      <div class="collapse collapse-arrow bg-base-200">
+        <input type="checkbox" />
+        <div class="collapse-title font-medium">Preview JSON</div>
+        <div class="collapse-content">
+          <pre class="text-xs overflow-x-auto p-3 bg-base-300 rounded-lg whitespace-pre-wrap">{@json_preview}...</pre>
+        </div>
+      </div>
+
+      <div class="collapse collapse-arrow bg-base-200">
+        <input type="checkbox" />
+        <div class="collapse-title font-medium">Prompt para IA</div>
+        <div class="collapse-content">
+          <pre class="text-sm whitespace-pre-wrap p-3 bg-base-300 rounded-lg">{get_in(@pack.data, ["prompt", "user"])}</pre>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</Layouts.app>

@@ -1,0 +1,70 @@
+<Layouts.app flash={@flash} current_scope={%{}}>
+  <div class="space-y-6">
+    <div>
+      <h1 class="text-2xl font-bold">Ligas</h1>
+      <p class="text-sm opacity-70">Selecione as ligas que deseja acompanhar</p>
+    </div>
+
+    <.form for={%{}} as={:search} phx-change="search">
+      <input
+        type="search"
+        name="search[q]"
+        value={@query}
+        placeholder="Buscar liga (ex: Brasileirão, Premier League)..."
+        class="input input-bordered w-full"
+        phx-debounce="400"
+      />
+    </.form>
+
+    <%= if @results != [] do %>
+      <ul class="menu bg-base-200 rounded-box">
+        <%= for league <- @results do %>
+          <li>
+            <button
+              type="button"
+              phx-click="add_league"
+              phx-value-league={Jason.encode!(league)}
+              class="flex justify-between"
+            >
+              <span>
+                {league["name"]}
+                <span class="text-xs opacity-60">
+                  {get_in(league, ["country", "name"])}
+                </span>
+              </span>
+              <.icon name="hero-plus" class="size-4" />
+            </button>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <div>
+      <h2 class="font-semibold mb-2">Ligas selecionadas ({length(@watched)})</h2>
+
+      <%= if @watched == [] do %>
+        <p class="text-sm opacity-60">Nenhuma liga selecionada ainda.</p>
+      <% else %>
+        <ul class="space-y-2">
+          <%= for league <- @watched do %>
+            <li class="flex items-center justify-between p-3 bg-base-200 rounded-lg">
+              <div>
+                <span class="font-medium">{league.name}</span>
+                <%= if league.country do %>
+                  <span class="text-xs opacity-60 ml-2">{league.country}</span>
+                <% end %>
+              </div>
+              <button
+                phx-click="remove_league"
+                phx-value-id={league.id}
+                class="btn btn-ghost btn-xs text-error"
+              >
+                Remover
+              </button>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+</Layouts.app>
