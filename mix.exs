@@ -90,7 +90,16 @@ defmodule BetDataAnalyzer.MixProject do
         "esbuild bet_data_analyzer --minify",
         "phx.digest"
       ],
-      precommit: ["compile --warnings-as-errors", "deps.unlock --unused", "format", "test"]
+      precommit: [
+        "format --check-formatted",
+        "compile --warnings-as-errors",
+        "cmd npm run format:check",
+        "test"
+      ],
+      "hooks.install": [
+        "cmd chmod +x bin/setup-hooks .githooks/pre-commit",
+        "cmd ./bin/setup-hooks"
+      ]
     ]
   end
 end

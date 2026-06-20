@@ -42,13 +42,20 @@ Acesse: http://localhost:4000
 
 O context pack inclui: fixture, últimos jogos, H2H, forma, stats de temporada, elenco, lesões, odds, predictions SportMonks e um bloco `prompt` com `system` + `user`.
 
-## Testes
+## Testes e qualidade
 
 ```bash
-mix test
+mix test          # 52 testes
+mix precommit     # format + compile + prettier + test
 ```
 
-52 testes cobrindo: SportMonks client/API (stub + Bypass), contexts, enricher, workers, LiveViews, export e schemas.
+Instalar git hooks locais:
+
+```bash
+mix hooks.install
+```
+
+CI no GitHub Actions roda em cada push/PR: `mix format`, `mix compile --warnings-as-errors`, Prettier (assets) e `mix test`.
 
 Em testes, a API SportMonks é substituída por `BetDataAnalyzer.Sportmonks.Stub` via injeção (`:sportmonks_http`).
 

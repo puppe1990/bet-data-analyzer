@@ -10,7 +10,12 @@ defmodule BetDataAnalyzer.Sportmonks.ClientTest do
     original_base = Application.get_env(:bet_data_analyzer, :sportmonks_base_url)
 
     Application.put_env(:bet_data_analyzer, :sportmonks_api_token, "test-token")
-    Application.put_env(:bet_data_analyzer, :sportmonks_base_url, "http://127.0.0.1:#{bypass.port}/v3/football")
+
+    Application.put_env(
+      :bet_data_analyzer,
+      :sportmonks_base_url,
+      "http://127.0.0.1:#{bypass.port}/v3/football"
+    )
 
     on_exit(fn ->
       Application.put_env(:bet_data_analyzer, :sportmonks_api_token, original_token)
