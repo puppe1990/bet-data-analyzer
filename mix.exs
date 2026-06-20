@@ -5,7 +5,7 @@ defmodule BetDataAnalyzer.MixProject do
     [
       app: :bet_data_analyzer,
       version: "0.1.0",
-      elixir: "~> 1.15",
+      elixir: "~> 1.17",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -90,7 +90,16 @@ defmodule BetDataAnalyzer.MixProject do
         "esbuild bet_data_analyzer --minify",
         "phx.digest"
       ],
-      precommit: ["compile --warnings-as-errors", "deps.unlock --unused", "format", "test"]
+      precommit: [
+        "format --check-formatted",
+        "compile --warnings-as-errors",
+        "cmd npm run format:check",
+        "test"
+      ],
+      "hooks.install": [
+        "cmd chmod +x bin/setup-hooks .githooks/pre-commit",
+        "cmd ./bin/setup-hooks"
+      ]
     ]
   end
 end

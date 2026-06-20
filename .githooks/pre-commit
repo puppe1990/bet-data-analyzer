@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+
+echo "→ mix format --check-formatted"
+mix format --check-formatted
+
+echo "→ mix compile --warnings-as-errors"
+mix compile --warnings-as-errors
+
+echo "→ npm run format:check"
+npm run format:check
+
+echo "→ mix test"
+mix test
+
+echo "✓ pre-commit checks passed"

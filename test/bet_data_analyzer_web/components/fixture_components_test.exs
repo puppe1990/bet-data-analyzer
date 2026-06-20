@@ -20,9 +20,7 @@ defmodule BetDataAnalyzerWeb.FixtureComponentsTest do
 
   test "fixture_badge/1 renders badge" do
     html =
-      rendered_to_string(
-        fixture_badge(%{status: "ready"})
-      )
+      rendered_to_string(fixture_badge(%{status: "ready"}))
 
     assert html =~ "Pronto"
     assert html =~ "badge-success"

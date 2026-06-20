@@ -36,8 +36,10 @@ defmodule BetDataAnalyzer.Enricher do
          {:ok, away_stats} <- fetch_optional(api_calls, fn -> Api.season_statistics(away_id) end),
          {:ok, home_squad} <- fetch_optional(api_calls, fn -> Api.team_squad(home_id) end),
          {:ok, away_squad} <- fetch_optional(api_calls, fn -> Api.team_squad(away_id) end),
-         {:ok, home_recent} <- fetch_optional(api_calls, fn -> Api.team_recent_fixtures(home_id) end),
-         {:ok, away_recent} <- fetch_optional(api_calls, fn -> Api.team_recent_fixtures(away_id) end) do
+         {:ok, home_recent} <-
+           fetch_optional(api_calls, fn -> Api.team_recent_fixtures(home_id) end),
+         {:ok, away_recent} <-
+           fetch_optional(api_calls, fn -> Api.team_recent_fixtures(away_id) end) do
       on_progress.(%{step: "building", progress: 90})
 
       standings = parse_standings(standings_raw, home_id, away_id)
@@ -151,7 +153,14 @@ defmodule BetDataAnalyzer.Enricher do
   end
 
   defp parse_standings(_, _, _) do
-    %{home_position: nil, away_position: nil, home_points: nil, away_points: nil, home_form: nil, away_form: nil}
+    %{
+      home_position: nil,
+      away_position: nil,
+      home_points: nil,
+      away_points: nil,
+      home_form: nil,
+      away_form: nil
+    }
   end
 
   defp find_standing(rows, team_id) do
@@ -270,7 +279,8 @@ defmodule BetDataAnalyzer.Enricher do
   defp parse_squad(%{"data" => squad}) when is_list(squad) do
     Enum.map(squad, fn entry ->
       %{
-        "player" => get_in(entry, ["player", "display_name"]) || get_in(entry, ["player", "name"]),
+        "player" =>
+          get_in(entry, ["player", "display_name"]) || get_in(entry, ["player", "name"]),
         "position" => entry["position_id"],
         "jersey_number" => entry["jersey_number"]
       }

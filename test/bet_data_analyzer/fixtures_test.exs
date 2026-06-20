@@ -23,6 +23,7 @@ defmodule BetDataAnalyzer.FixturesTest do
 
   test "list_upcoming/1 filters by search term" do
     Factory.insert_fixture(%{name: "Hibernian vs Dundee United"})
+
     Factory.insert_fixture(%{
       name: "Other vs Match",
       sportmonks_id: 99_999,

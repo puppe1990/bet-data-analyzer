@@ -55,7 +55,9 @@ defmodule BetDataAnalyzer.Sportmonks.Api do
   end
 
   def head_to_head(team1_id, team2_id) do
-    http().get("/fixtures/head-to-head/#{team1_id}/#{team2_id}", include: "participants;scores;league")
+    http().get("/fixtures/head-to-head/#{team1_id}/#{team2_id}",
+      include: "participants;scores;league"
+    )
   end
 
   def standings_by_season(season_id) do

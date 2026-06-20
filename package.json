@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "scripts": {
+    "format": "prettier --write \"assets/js/**/*.{js,json}\" \"assets/css/**/*.css\" \"assets/tsconfig.json\"",
+    "format:check": "prettier --check \"assets/js/**/*.{js,json}\" \"assets/css/**/*.css\" \"assets/tsconfig.json\""
+  },
+  "devDependencies": {
+    "prettier": "^3.5.3"
+  }
+}

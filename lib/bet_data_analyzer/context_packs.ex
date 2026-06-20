@@ -59,7 +59,9 @@ defmodule BetDataAnalyzer.ContextPacks do
         pack
         |> ContextPack.changeset(%{status: "failed", error_message: message, progress: 0})
         |> Repo.update!()
-        |> tap(fn p -> broadcast(fixture.id, %{status: "failed", error_message: message, pack: p}) end)
+        |> tap(fn p ->
+          broadcast(fixture.id, %{status: "failed", error_message: message, pack: p})
+        end)
     end
   end
 
